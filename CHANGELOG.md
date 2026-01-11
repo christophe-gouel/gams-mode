@@ -8,28 +8,56 @@ Maintainer: Shiro Takeda
 Change logs of GAMS mode.
 ====================================================
 
+Version 7.1
+----------------------------------
+
+* Introduce `gams-install.el`, enabling GAMS installation directly from
+  Emacs on Windows, macOS, and Linux, including asynchronous download of
+  the latest release or a user-specified version.
+* Add helper `gams-install-check-installation` and Linux-only
+  customization of the installation directory.
+* Provide accompanying platform scripts (`gams_install.sh`,
+  `gams_install.ps1`).
+
 Version 7.0
 ----------------------------------
 
-*  `gams-file-extension` has been removed because it does not work well
-   with deferred package loading and can prevent `poly-gams`from loading
+* Enable jump to errors from process buffer using `compilation-minor-mode`
+  and some regexp. This allows the use of standard Emacs keybindings to
+  jump to errors from the `gms` file.
+
+* `gams-file-extension` has been removed because it does not work well
+   with deferred package loading and can prevent `poly-gams `from loading
    properly.
 
-*  All paths to executables and folders should be set automatically if
-   GAMS is present in the PATH. If this is not the case, the only thing to
-   set is the path to the `gams` executable.
+* All paths to executables and folders should be set automatically if GAMS
+  is present in the PATH. If this is not the case, the only thing to set
+  is the path to the `gams` executable.
 
 * Adjustments in docstrings to follow more elisp conventions (still a lot to do).
 
 * `major-mode` is now derived from prog-mode. This was supposed to be the
   case before, but all features of prog-mode were immediately killed.
 
-* The GAMS process buffer is now turned to `view-mode` at the end of compilation, which prevents any modification and add special keybindings to move inside the buffer.
+* The GAMS process buffer is now turned to `view-mode` at the end of
+  compilation, which prevents any modification and add special keybindings
+  to move inside the buffer.
+
+* Add a customizable variable `gams-company-backends`.
+
+* Apply `gams-browse-url-function` everywhere where `browse-url` was used
+  for consistent behavior.
+
+* Add syntax highlighting for mathematical operators.
+
+* Add function `gams-open-gdx` that opens in GAMS Studio the gdx file with the same name as the current gms file, if available, or ask for a gdx file name. Bound to `C-c C-x`.
+
+* Add function `gams-clean-files-and-folders` that clean all GAMS-created files and folders.
 
 Version 6.16
 ----------------------------------
 
-* The font-locking and autocompletion features have been improved. 
+* The font-locking and autocompletion features have been improved.
 
 * `company-mode`, which is a text completion framework for Emacs, has been
   available in GAMS mode since version 6.13. If you want to use
@@ -48,7 +76,7 @@ Version 6.15
 
 * In GAMS-SIL mode, $label command is now treated in the same way as
   $title command.
-  
+
 
 
 Version 6.14
@@ -81,7 +109,7 @@ Version 6.12
 * Bind `C-c C-;` to `gams-comment-or-uncomment-region`, which is an alias
   of `comment-or-uncomment-region` You can comment or uncomment a region
   with `C-c C-;`.
-  
+
 * Fixed the bug in systax highligting and automatic indentation.
 
 
@@ -91,12 +119,12 @@ Version 6.11
 * Modified `gams-view-lst` and `gams-jump-to-lst`. If you attch the
   universal-argument (C-u) to these commands, you can show the LST file
   buffer next to the GAMS buffer.
-  
+
 * Modified the function `gams-fill-paragraph` which is binded to "M-q" in
   GAMS mode.
 
 * Slightly modified `gams-show-identifier`.
-  
+
 
 Version 6.10
 ----------------------------------
@@ -105,12 +133,12 @@ Version 6.10
 
   If you want to use smartparen-mode within GAMS mode, add the following
   code in your init.el file
-  
+
         (setq gams-close-paren-always nil)
         (setq gams-close-double-quotation-always nil)
         (setq gams-close-single-quotation-always nil)
         (add-hook 'gams-mode-hook #'smartparens-mode)
-        
+
 * Changed the default value of `gams-process-command-option` to
   "logOption=3 pageWidth=100".
 
@@ -157,7 +185,7 @@ Version 6.7
 * Modified `gams-view-document` function (C-cC-m). The current GAMS
   system offers manuals in html format (GAMS Documentation Center). The
   new version of GAMS mode enables you to open documents from GAMS mode.
-  
+
   You can choose online documents or offline documents.  If you attach the
   universal argument C-uC-cC-m, then you can search a command under the
   cursor in the documentation center (this command search function is
@@ -202,7 +230,7 @@ Version 6.5
   versions of GAMS system. Added new variables `gams-docs-url` and
   `gams-docs-view-old` and modified the default value of
   `gams-docs-view-program`.
-  
+
 * Changed GAMS mode icon for modeline.
 
 * Removed `gams-auto-complete.el` from GAMS mode
