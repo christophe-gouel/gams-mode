@@ -16,6 +16,7 @@
 "LicenseLevel"
 "IsAlphaBeta"
 "MaxInput"
+"IsNetworkLicense"
 "Date"
 "Time"
 "Title"
