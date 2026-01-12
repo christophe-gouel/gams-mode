@@ -202,29 +202,231 @@ dedicated navigation keys and integration with @code{next-error}.
 insert statements and dollar control options without retyping them.
 @end enumerate
 
-@section Key bindings
+@section Key bindings in GAMS mode
 @cindex Key bindings, GAMS mode
 
-This section lists frequently used bindings in @code{gams-mode}.  All
-commands are available through @kbd{M-x} and the GAMS menu.
+This section lists all key bindings available in @code{gams-mode}.  All
+commands are also available through @kbd{M-x} and the GAMS menu.
+
+@subsection Code insertion and editing
 
 @table @kbd
 @item C-c C-k
-Insert a GAMS statement with completion support.
+@findex gams-insert-statement
+Insert a GAMS statement with completion support.  Prompts for a statement
+name and inserts it at point.  The casing follows
+@code{gams-completion-case}.
+
 @item C-c C-d
-Insert a dollar control option with completion.
-@item f9
-Run the current model and display the process buffer.
+@findex gams-insert-dollar-control
+Insert a dollar control option with completion.  Similar to
+@kbd{C-c C-k} but for dollar control options like @code{$include},
+@code{$ontext}, etc.
+
+@item C-c C-n
+@findex gams-insert-statement-extended
+Insert a GAMS statement in extended mode, which provides additional
+context-aware features.
+
+@subsection Comments
+
+@item C-c C-o
+@findex gams-insert-comment
+Insert a user-defined comment template as specified in
+@code{gams-user-comment}.  The template may include a @samp{%} marker
+indicating where the cursor should be placed after insertion.
+
+@item C-c C-c
+@findex gams-insert-on-off-text
+Insert an @code{$ontext}--@code{$offtext} pair for block comments.  When
+used with a prefix argument (@kbd{C-u C-c C-c}), enclose the current
+region in an @code{$ontext}--@code{$offtext} pair.
+
+@item C-c C-g
+@findex gams-jump-on-off-text
+Jump between matching @code{$ontext} and @code{$offtext} delimiters.
+
+@item C-c M-c
+@findex gams-comment-on-off-text
+Comment or uncomment an @code{$ontext}--@code{$offtext} pair.
+
+@item C-c M-g
+@findex gams-remove-on-off-text
+Remove the surrounding @code{$ontext} and @code{$offtext} lines, leaving
+the enclosed text in place.
+
+@item C-c C-;
+@findex gams-comment-dwim-inline
+@findex gams-comment-or-uncomment-region
+Insert or manipulate inline comments.  This command is also aliased to
+@code{comment-or-uncomment-region}, allowing you to comment or uncomment
+a selected region.
+
+@item C-c M-;
+@findex gams-comment-dwim
+Insert or manipulate end-of-line comments.  The comment symbol is
+determined by @code{gams-eolcom-symbol-default} or any active
+@code{$eolcom} directive in the buffer.
+@end table
+
+@subsection Running GAMS and viewing output
+
+@table @kbd
+@item C-c C-s
+@itemx f9
+@findex gams-start-processor
+Run GAMS on the current file and display the process buffer.  The buffer
+is saved automatically before execution.  Output appears in a buffer named
+@samp{*GAMS*}.
+
+@item C-u C-c C-t
+Edit the GAMS command line and options before starting execution.
+
 @item C-c C-t
-Open the process menu to run the current file, change its command line
-options, or kill the process.
-@item C-c C-l or f10
-Open the associated listing file in GAMS LST mode.
+@findex gams-start-menu
+Open the process menu, which offers options to run GAMS, kill the running
+process, change command-line options, or select a different GAMS
+executable.
+
+@item C-c C-l
+@findex gams-popup-process-buffer
+Display the GAMS process buffer in another window.  Useful when
+@code{gams-always-popup-process-buffer} is set to @code{nil}.
+
+@item C-c C-v
+@itemx f10
+@findex gams-view-lst
+Switch to the LST file corresponding to the current GMS file.  If errors
+are present, position point at the first error.  With a prefix argument
+(@kbd{C-u C-c C-v}), display the LST file in a side-by-side window
+layout.
+
+@item C-c C-j
+@findex gams-jump-to-lst
+Switch to the LST file without checking for errors.
+
+@item C-c C-i
+@itemx f11
+@findex gams-from-gms-to-outline
+Jump directly from the GMS file to the GAMS-OUTLINE buffer, bypassing the
+LST file view.
+@end table
+
+@subsection Navigation and inspection
+
+@table @kbd
+@item C-c C-.
+@itemx f7
+@findex gams-show-identifier
+Show the declaration of the identifier at point.  When invoked on a
+variable, equation, parameter, or set name, this command searches for and
+displays its definition.  Use it to quickly review declarations while
+editing.
+
+@item C-c C-a
+@findex gams-show-identifier-list
+Display a structured list of all identifiers (sets, parameters, variables,
+equations) defined in the current buffer and any included files.  The
+list is shown in GAMS-SIL mode, which provides navigation and filtering
+commands.
+
+@item C-c C-w
+@findex gams-open-included-file
+Open the file referenced in an @code{$include} or @code{$batinclude}
+directive at point.  Place the cursor on or near the file name and invoke
+this command to visit the included file.
+
+@item f8
+@findex gams-goto-matched-paren
+Jump to the matching parenthesis.  This command works when point is on an
+opening or closing parenthesis, similar to the @kbd{%} command in vi or
+the @kbd{f8} key in GAMS Studio.
+@end table
+
+@subsection Documentation and help
+
+@table @kbd
 @item C-c C-m
-Browse the GAMS documentation.
+@findex gams-view-document
+Browse the GAMS documentation.  The browser is selected according to
+@code{gams-browse-url-function}.  Setting that variable to
+@code{xwidget-webkit-browse-url} opens the documentation inside Emacs on
+systems with Xwidgets support.
+
+@item C-c C-z
+@findex gams-model-library
+Open the GAMS model library browser.  This command allows you to search,
+view, and extract example models from the GAMS distribution.
+@end table
+
+@subsection Templates and customization
+
+@table @kbd
+@item C-c C-e
+@findex gams-template
+Enter GAMS-TEMPLATE mode to insert, edit, or manage code templates.
+Templates are stored in @code{gams-template-file} and provide reusable
+code fragments for common patterns.
+
+@item C-c C-f
+@findex gams-choose-font-lock-level
+Cycle through font-lock (syntax highlighting) levels.  GAMS mode supports
+multiple levels of colorization.  Use this command to select the level
+that balances visual clarity and performance.
+@end table
+
+@subsection Window and buffer management
+
+@table @kbd
+@item C-l
+Recenter the window so that point is in the middle of the screen.  If
+@code{gams-recenter-font-lock} is non-nil, the visible portion of the
+buffer is refontified as well.
+
+@item C-c C-h
+@findex gams-toggle-hide-show-comment-lines
+Toggle visibility of all comment lines (lines starting with @samp{*} or
+enclosed in @code{$ontext}--@code{$offtext} blocks).  This command uses
+Emacs' selective display feature and does not modify the buffer contents.
+
 @item C-c C-x
-Open the GDX file that matches the current model name, or prompt for a
-file when no match is found.
+@findex gams-open-gdx
+Open the GDX file associated with the current model.  If a file matching
+the model name is found, it is opened in GAMS Studio.  Otherwise, the
+command prompts for a GDX file to open.
+@end table
+
+@subsection Outline navigation
+
+When @code{outline-minor-mode} features are enabled, these additional
+bindings provide headline-based navigation:
+
+@table @kbd
+@item TAB
+@findex org-cycle
+Cycle the visibility of the current outline section.  Successive
+invocations toggle between showing and hiding the body of the section.
+
+@item S-TAB
+@findex org-global-cycle
+Cycle the visibility of the entire buffer.  Use this to collapse or expand
+all outline sections at once.
+
+@item C-c C-: n
+@findex outline-next-visible-heading
+Move to the next visible headline.
+
+@item C-c C-: p
+@findex outline-previous-visible-heading
+Move to the previous visible headline.
+
+@item C-c C-: f
+@findex gams-org-fold-current-tree
+Fold the current outline tree, hiding its contents.
+
+@item C-c C-: k
+@findex show-branches
+Show the structure of the current section without revealing the body text.
 @end table
 
 @section Auto-completion
@@ -258,19 +460,201 @@ package.
 It derives from @code{special-mode} and adds key bindings that jump
 between errors and sections.
 
-Within an LST buffer the following bindings are particularly useful:
+@section Key bindings in GAMS-LST mode
+@cindex Key bindings, GAMS-LST mode
+
+The following key bindings are available when viewing LST files.  All
+commands work in @code{view-mode}, which means the buffer is read-only
+and provides special navigation features.
+
+@subsection Error navigation and file jumping
 
 @table @kbd
-@item n / p
-Move to the next or previous section detected in the listing.
+@item y
+@findex gams-lst-view-error
+Jump to the first error in the listing file and display its error number
+and message in the minibuffer.  This command positions point at the error
+location and shows the error details.
+
+@item u
+@findex gams-lst-jump-to-error-file
+Jump back to the error location in the input (GMS) file.  Use this after
+examining an error with @kbd{y} to return to the source code where the
+error occurred.
+
+@item i
+@findex gams-lst-jump-to-input-file
+Jump to the corresponding location in the input (GMS) file.  This works
+for any line in the LST file that references the source, not just errors.
+
+@item b
+@findex gams-lst-jump-to-input-file-2
+Alternative command to jump to the input file, providing slightly
+different behavior in some contexts.
+
+@item l
+@findex gams-lst-jump-to-line
+Jump to a specific line number in the listing file.  Prompts for a line
+number and moves point there.
+
+@item L
+@findex gams-lst-jump-to-line
+Jump to a line you specify, with additional prompting features.
+@end table
+
+@subsection Navigation within the listing
+
+@table @kbd
+@item s
+@findex gams-lst-next-solve-summary
+Jump to the next SOLVE SUMMARY section in the listing.
+
+@item S
+@findex gams-lst-previous-solve-summary
+Jump to the previous SOLVE SUMMARY section.
+
+@item r
+@findex gams-lst-next-report-summary
+Jump to the next REPORT SUMMARY section.
+
+@item R
+@findex gams-lst-previous-report-summary
+Jump to the previous REPORT SUMMARY section.
+
+@item v
+@findex gams-lst-next-variable
+Jump to the next VAR (variable) entry.
+
+@item V
+@findex gams-lst-previous-variable
+Jump to the previous VAR entry.
+
+@item e
+@findex gams-lst-next-equation
+Jump to the next EQU (equation) entry.
+
+@item E
+@findex gams-lst-previous-equation
+Jump to the previous EQU entry.
+
+@item p
+@findex gams-lst-next-parameter
+Jump to the next PARAMETER entry in the listing.
+
+@item P
+@findex gams-lst-previous-parameter
+Jump to the previous PARAMETER entry.
+
+@item x
+@findex gams-lst-next-elt
+Jump to the next Equation Listing section in the output.
+
+@item X
+@findex gams-lst-previous-elt
+Jump to the previous Equation Listing section.
+
+@item c
+@findex gams-lst-next-clt
+Jump to the next Column Listing section.
+
+@item C
+@findex gams-lst-previous-clt
+Jump to the previous Column Listing section.
+
+@item .
+@findex gams-lst-file-summary
+Display a summary of the listing file, showing key statistics and
+sections.
+@end table
+
+@subsection Buffer and window management
+
+@table @kbd
+@item q
+@findex gams-lst-quit
+Close the LST buffer and return to the previous buffer configuration.
+
+@item ?
+Display help information for GAMS-LST mode, showing all available key
+bindings and their descriptions.
+
 @item o
-Open GAMS Outline mode for the current listing.
+@itemx O
+@findex gams-outline
+@findex gams-outline-external
+Open GAMS-OUTLINE mode for the current listing.  @kbd{O} invokes an
+external program for faster processing of large files.
+
+@item SPACE
+@findex scroll-up
+Scroll the listing buffer up (forward) by one screenful.
+
+@item DELETE
+@itemx BACKSPACE
+@findex scroll-down
+Scroll the listing buffer down (backward) by one screenful.
+
+@item d
+@findex gams-lst-scroll-1
+Scroll down by one line without moving point.
+
+@item f
+@findex gams-lst-scroll-2
+Scroll up by one line without moving point.
+
 @item g
-Revert the buffer to reflect the most recent run.
-@item d f g h j k
-Scroll the listing buffer without moving point.
+@findex gams-lst-scroll-page-2
+Scroll down by half a page without moving point.
+
+@item h
+@findex gams-lst-scroll-page-1
+Scroll up by half a page without moving point.
+
+@item j
+@findex gams-lst-scroll-3
+Scroll to the left, useful for wide listings.
+
+@item k
+@findex gams-lst-scroll-4
+Scroll to the right.
+
+@item 1
+@findex delete-other-windows
+Widen the current LST window to fill the entire frame.
+
+@item 2
+@findex split-window-vertically
+Split the window vertically, showing two views of the listing or allowing
+another buffer to be displayed.
+
+@item m
+@findex gams-lst-move-frame
+Move the frame to a different position on the screen.  Useful for
+organizing multiple frames.
+
 @item w
-Resize the frame to a convenient layout for log inspection.
+@findex gams-lst-resize-frame
+Resize the current frame to a convenient layout for inspecting solver
+output.
+
+@item z
+@findex other-window
+Move the cursor to the other window when the frame is split.
+@end table
+
+@subsection Additional features
+
+@table @kbd
+@item C-c C-x
+@findex gams-open-gdx
+Open the GDX file associated with the current model.  If a file with the
+same base name exists, it is opened in GAMS Studio; otherwise, the
+command prompts for a file.
+
+@item g
+@findex revert-buffer
+Revert the buffer to reflect the most recent run.  This reloads the LST
+file from disk, useful when re-running the model.
 @end table
 
 @section Outline and SIL modes
