@@ -13,6 +13,9 @@ jobs:
           - emacs: 25.1
             ts: false
             lint: true
+          - emacs: 27.1
+            ts: false
+            lint: true
           - emacs: snapshot
             ts: true
             lint: true

@@ -60,6 +60,9 @@
 
 ;; Forward declarations
 (declare-function gams-buffer-substring "gams-mode")
+;; Emacs 25.1 compatibility: next-error-select-buffer was added in Emacs 27.1
+;; Remove this declaration when minimum Emacs version is 27.1+
+(declare-function next-error-select-buffer "compile" (buffer))
 
 (defsubst gams-oddp (x)
   "Return t if X is odd."
@@ -3914,7 +3917,10 @@ PROC is the process name and STATE is the process state."
           (setq-local compilation-error-regexp-alist
                       (remove 'cucumber compilation-error-regexp-alist))
 	  ;; Ensures that next-error jumps to errors in this buffer and not to the last compile buffer
-	  (next-error-select-buffer (current-buffer))
+	  ;; Emacs 25.1 compatibility: next-error-select-buffer was added in Emacs 27.1
+	  ;; Remove the fboundp check when minimum Emacs version is 27.1+
+	  (when (fboundp 'next-error-select-buffer)
+	    (next-error-select-buffer (current-buffer)))
           (select-window sw)
           (if err
               (message (concat
@@ -10900,6 +10906,10 @@ If PREV is non-nil, move up after toggle."
 This command is valid only if the cursor is on the file name after
 $batinclude or $include."
   (interactive)
+  ;; Emacs 25.1 compatibility: Declare dynamic variable to avoid
+  ;; "unused lexical variable" warning with lexical-binding: t
+  ;; This defvar can be removed when minimum Emacs version is 27.1+
+  (defvar thing-at-point-file-name-chars)
   (let* ((thing-at-point-file-name-chars "~/A-Za-z0-9---_.${}#%,:\\\\")
          (temp-fname (gams-get-included-filename))
          fname)
