@@ -55,6 +55,12 @@
   (require 'browse-url)
   (require 'org))
 
+;; Silence byte-compiler warnings for external variables
+(defvar company-backends)  ; From company-mode
+
+;; Forward declarations
+(declare-function gams-buffer-substring "gams-mode")
+
 (defsubst gams-oddp (x)
   "Return t if X is odd."
   (eq (logand x 1) 1))
@@ -12264,9 +12270,12 @@ Suppose that there are three windows displayed like
    |                  |
     ------------------
 
-\\[gams-lst-scroll-1](\\[gams-lst-scroll-down-1])               Scroll the next buffer (LST-1) up (down) one line.
-\\[gams-lst-scroll-2](\\[gams-lst-scroll-down-2])               Scroll the other next buffer (LST-2) up (down) one line.
-\\[gams-lst-scroll-double](\\[gams-lst-scroll-down-double])             Scroll two LST buffers (LST-1 and LST-2) up (down) one line.
+\\[gams-lst-scroll-1](\\[gams-lst-scroll-down-1])
+    Scroll the next buffer (LST-1) up (down) one line.
+\\[gams-lst-scroll-2](\\[gams-lst-scroll-down-2])
+    Scroll the other next buffer (LST-2) up (down) one line.
+\\[gams-lst-scroll-double](\\[gams-lst-scroll-down-double])
+    Scroll two LST buffers (LST-1 and LST-2) up (down) one line.
 
 Keyboard.
 
@@ -12284,14 +12293,19 @@ Keyboard.
 
 If only two window exists (e.g. OL-1 and LST-1),
 
-\\[gams-lst-scroll-1] or '\\[gams-lst-scroll-2] or '\\[gams-lst-scroll-double]  ==> Scroll LST-1 up a line.
-\\[gams-lst-scroll-down-1] or '\\[gams-lst-scroll-down-2] or '\\[gams-lst-scroll-down-double]  ==> Scroll LST-1 down a line.
+\\[gams-lst-scroll-1] or \\[gams-lst-scroll-2] or \\[gams-lst-scroll-double]
+    ==> Scroll LST-1 up a line.
+\\[gams-lst-scroll-down-1] or \\[gams-lst-scroll-down-2] or
+    \\[gams-lst-scroll-down-double]  ==> Scroll LST-1 down a line.
 
 The followings are page scroll commands.  Just changed to upper cases.
 
-\\[gams-lst-scroll-page-1](\\[gams-lst-scroll-page-down-1])             Scroll the next buffer (LST-1) up (down) a page.
-\\[gams-lst-scroll-page-2](\\[gams-lst-scroll-page-down-2])             Scroll the other next buffer (LST-2) up (down) a page.
-\\[gams-lst-scroll-page-double](\\[gams-lst-scroll-page-down-double])           Scroll two buffers (LST-1 and LST-2) up (down) a page."
+\\[gams-lst-scroll-page-1](\\[gams-lst-scroll-page-down-1])
+    Scroll the next buffer (LST-1) up (down) a page.
+\\[gams-lst-scroll-page-2](\\[gams-lst-scroll-page-down-2])
+    Scroll the other next buffer (LST-2) up (down) a page.
+\\[gams-lst-scroll-page-double](\\[gams-lst-scroll-page-down-double])
+    Scroll two buffers (LST-1 and LST-2) up (down) a page."
   (interactive)
   (setq major-mode 'gams-ol-mode)
   (setq mode-name "GAMS-OUTLINE")
@@ -15990,7 +16004,8 @@ Return c if the current line is commented line (*, eol, inline).
 Return e if the current line is empty.
 Return c if the current line starts with * if com is non-nil.
 Return p if the current line starts with + and if PLUS is non-nil.
-Return d if the current line starts with dollar control and if DOLLAR is non-nil.
+Return d if the current line starts with dollar control and if
+  DOLLAR is non-nil.
 Return s if the current line starts with slash and if SLASH is non-nil.
 Return k if the current line starts with ); and if PAREN is non-nil.
 Otherwise nil."

@@ -1,2 +1,3 @@
 .aider*
 *.info
+/gams-mode.elc
