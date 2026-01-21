@@ -9,6 +9,7 @@
 "DomLim"
 "DualCheck"
 "ECImplicitLoad"
+"ECLogLine"
 "Eject"
 "EpsToZero"
 "FDDelta"

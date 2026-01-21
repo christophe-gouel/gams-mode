@@ -37,7 +37,7 @@ get_gams_commands () {
     grep -oE '\"[^\"]*\"' $1 | awk 'NR % 2 == 1'
 }
 
-rm temp_syntax.txt 
+rm temp_syntax.txt
 
 for tempfile in temp*.txt
 do
@@ -46,7 +46,7 @@ done
 
 # Export dollar commands
 sort commands_dollar.txt | uniq > ../gams-commands-dollar.txt
-rm commands_dollar.txt 
+rm commands_dollar.txt
 
 # Add combined declations
 sed 's/"\([^"]*\)"/"\1 Variable"/g' commands_declaration_var.txt > commands_declaration2.txt
@@ -61,7 +61,7 @@ do
 done
 
 # Add missing commands
-echo -e "\"maximizing\"\\n\"minimizing\"" >> temp.txt
+printf "\"maximizing\"\\n\"minimizing\"" >> temp.txt
 
 # Remove duplicates and export GAMS commands
 sort temp.txt | uniq > ../gams-commands.txt

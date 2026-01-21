@@ -8,6 +8,27 @@ Maintainer: Shiro Takeda
 Change logs of GAMS mode.
 ====================================================
 
+Version 7.3
+----------------------------------
+
+* Add an info file.
+* Update GAMS commands to GAMS version 52.3.0.
+* Improve and clarify docstrings across the codebase (gams-mode, gams-sil).
+* Stop requiring `gams-install.el` to support installation from MELPA.
+* Address warnings that appeared during byte compilation.
+
+Version 7.2
+----------------------------------
+
+* Change required version of Emacs and update doc strings.
+* Make revisions to eliminate warnings during byte compilation.
+* Fix position of closing parenthesis according to Flycheck's suggestions.
+* Remove an unnecessary function.
+* Better defcustom defaults.
+* Modify docstring.
+* Update gamslxi.
+* Remove cucumber from the compilation error regexp.
+
 Version 7.1
 ----------------------------------
 

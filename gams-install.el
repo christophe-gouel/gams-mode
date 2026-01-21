@@ -2,7 +2,7 @@
 
 ;; Author: Christophe Gouel <christophe.gouel@inrae.fr>
 ;; Maintainer: Christophe Gouel
-;; Copyright (C) 2025 Christophe Gouel
+;; Copyright (C) 2025-2026 Christophe Gouel
 
 ;; This file is not part of any Emacs.
 
@@ -46,7 +46,7 @@ If CALLBACK is provided, call it with the version as argument when done."
   (interactive)
   (url-retrieve
    "https://www.gams.com/download/"
-   (lambda (status)
+   (lambda (_status)
      (goto-char (point-min))
      (when (search-forward-regexp "Download GAMS Release \\([0-9]+\\.[0-9]+\\.[0-9]+\\)" nil t)
        (let ((version (match-string 1)))
