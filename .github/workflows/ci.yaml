@@ -25,9 +25,9 @@ jobs:
         version: ${{ matrix.emacs }}
     - uses: actions/checkout@v4
 
-    - name: Install package-lint
-      run: emacs -Q -l .github/workflows/init.el -batch
-                    --eval "(package-install 'package-lint)"
+    # - name: Install package-lint
+    #   run: emacs -Q -l .github/workflows/init.el -batch
+    #                 --eval "(package-install 'package-lint)"
 
     # - name: Lint gams-mode
     #   run: emacs -Q -l .github/workflows/init.el -batch
@@ -39,7 +39,7 @@ jobs:
                     -L .
                     --eval "(setq byte-compile-error-on-warn t)"
                     -f batch-byte-compile
-                    gams-mode.el
+                    gams-mode.el gams-install.el
 
     - name: Install texinfo
       run: sudo apt-get update && sudo apt-get install -y texinfo
