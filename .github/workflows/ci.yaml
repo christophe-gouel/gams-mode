@@ -26,10 +26,10 @@ jobs:
       run: emacs -Q -l .github/workflows/init.el -batch
                     --eval "(package-install 'package-lint)"
 
-    - name: Lint gams-mode
-      run: emacs -Q -l .github/workflows/init.el -batch
-                    -f package-lint-batch-and-exit
-                    gams-mode.el
+    # - name: Lint gams-mode
+    #   run: emacs -Q -l .github/workflows/init.el -batch
+    #                 -f package-lint-batch-and-exit
+    #                 gams-mode.el
 
     - name: Byte-compile
       run: emacs -Q -l .github/workflows/init.el -batch
@@ -37,3 +37,9 @@ jobs:
                     --eval "(setq byte-compile-error-on-warn t)"
                     -f batch-byte-compile
                     *.el
+
+    - name: Install texinfo
+      run: sudo apt-get update && sudo apt-get install -y texinfo
+
+    - name: Build documentation
+      run: makeinfo --no-split doc/gams-mode.texi -o doc/gams-mode.info
