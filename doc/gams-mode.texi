@@ -227,8 +227,11 @@ Insert a dollar control option with completion.  Similar to
 @findex gams-insert-statement-extended
 Insert a GAMS statement in extended mode, which provides additional
 context-aware features.
+@end table
 
 @subsection Comments
+
+@table @kbd
 
 @item C-c C-o
 @findex gams-insert-comment
