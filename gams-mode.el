@@ -119,8 +119,22 @@
   :type 'file
   :group 'gams)
 
-(defcustom gams-system-directory (file-name-directory gams-process-command-name)
-  "The ‘GAMS’ system directory (the directory where GAMS is installed)."
+(defcustom gams-system-directory
+  (let* ((cmd gams-process-command-name)
+         (cmd-dir (and (stringp cmd) (file-name-directory cmd)))
+         (env (getenv "GAMSDIR")))
+    (cond
+     (cmd-dir
+      cmd-dir)
+     ((and (stringp env) (not (string= env "")))
+      (file-name-as-directory (expand-file-name env)))
+     (t
+      "")))
+  "The ‘GAMS’ system directory (the directory where GAMS is installed).
+
+If `gams-process-command-name' does not include a directory component,
+fall back to the environment variable GAMSDIR (if set).  Otherwise,
+use an empty string."
   :type 'directory
   :group 'gams)
 
@@ -271,7 +285,10 @@ percentage of it.  If nil, use default `pop-to-buffer'."
   :group 'gams)
 
 (defcustom gams-docs-directory
-  (concat (file-name-as-directory gams-system-directory) "docs")
+  (if (and (stringp gams-system-directory)
+           (not (string= gams-system-directory "")))
+      (concat (file-name-as-directory gams-system-directory) "docs")
+    "")
   "The GAMS document directory.
 By default, it is set to `gams-system-directory' + docs."
   :type 'directory
